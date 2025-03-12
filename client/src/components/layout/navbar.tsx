@@ -13,8 +13,8 @@ export default function Navbar() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const navRef = useRef<HTMLDivElement>(null);
   
-  // Magnetic effect calculation
-  const calculateMagneticEffect = (element: HTMLElement, scale = 1.05, distance = 500) => {
+  // Magnetic effect calculation - with reduced effect and distance
+  const calculateMagneticEffect = (element: HTMLElement, scale = 1.03, distance = 100) => {
     if (!navRef.current) return { x: 0, y: 0, scale: 1 };
     
     const { left, top, width, height } = element.getBoundingClientRect();
@@ -25,13 +25,13 @@ export default function Navbar() {
     const distanceY = mousePosition.y - centerY;
     const totalDistance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
     
-    // Only apply effect when mouse is close enough
+    // Only apply effect when mouse is close enough - reduced distance for more subtle effect
     if (totalDistance < distance) {
       const intensity = 1 - totalDistance / distance;
       return { 
-        x: distanceX * 0.2 * intensity, 
-        y: distanceY * 0.2 * intensity,
-        scale: 1 + (scale - 1) * intensity
+        x: distanceX * 0.1 * intensity, // Reduced movement factor
+        y: distanceY * 0.1 * intensity, // Reduced movement factor
+        scale: 1 + (scale - 1) * intensity // Smaller scaling
       };
     }
     
@@ -189,11 +189,11 @@ export default function Navbar() {
             rel="noopener noreferrer"
             className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-full"
             whileHover={{ 
-              scale: 1.2, 
+              scale: 1.1, 
               backgroundColor: "rgba(236, 72, 153, 0.1)",
-              transition: { type: "spring", stiffness: 400, damping: 10 }
+              transition: { duration: 0.2 }
             }}
-            whileTap={{ scale: 0.9 }}
+            whileTap={{ scale: 0.95 }}
           >
             <SiInstagram className="h-5 w-5" />
           </motion.a>
@@ -201,11 +201,11 @@ export default function Navbar() {
             href="mailto:ainexus.srmist@gmail.com"
             className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-full"
             whileHover={{ 
-              scale: 1.2, 
+              scale: 1.1, 
               backgroundColor: "rgba(56, 189, 248, 0.1)",
-              transition: { type: "spring", stiffness: 400, damping: 10 }
+              transition: { duration: 0.2 }
             }}
-            whileTap={{ scale: 0.9 }}
+            whileTap={{ scale: 0.95 }}
           >
             <Mail className="h-5 w-5" />
           </motion.a>
