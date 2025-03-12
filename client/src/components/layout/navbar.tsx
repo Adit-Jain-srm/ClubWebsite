@@ -20,11 +20,6 @@ export default function Navbar() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2 mr-8">
-            <img 
-              src="/logo.svg" 
-              alt="AI Nexus Club" 
-              className="h-10 w-10"
-            />
             <div>
               <span className="font-bold text-lg">AI Nexus</span>
               <span className="text-xs block text-muted-foreground">SRM IST Delhi-NCR</span>
