@@ -1,8 +1,11 @@
 import { motion, useMotionValue, useTransform, useSpring, useScroll } from "framer-motion";
-import { Calendar, Sparkles, Cpu, ArrowUpRight, ChevronRight } from "lucide-react";
+import { Calendar, Sparkles, Cpu, ArrowUpRight, ChevronRight, CalendarPlus, Share2, Bell } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, KeyboardEvent } from "react";
 import { Button } from "@/components/ui/button";
+import { SkipLink, ContrastChecker, FocusRing } from "@/components/ui/a11y-utils";
+import { ResponsiveText } from "@/components/ui/ResponsiveText";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const upcomingEvents = [
   {
@@ -10,45 +13,69 @@ const upcomingEvents = [
     title: "Prompt~Craft",
     date: "March 2025",
     description: "Interactive seminar on Large Language Models (LLMs) and prompt engineering, covering GPT-based automation, AI agents, and API-driven AI interactions with expert insights.",
-    tags: ["LLM", "GPT", "AI Agents"]
+    tags: ["LLM", "GPT", "AI Agents"],
+    color: "#0ea5e9", // sky blue
+    location: "Main Auditorium",
+    whatsappGroup: "https://chat.whatsapp.com/IL3EaAdWweQDMg3TEy2lgR"
   },
   {
     id: 2,
     title: "Smart Stocks – AI & ML Strategies",
     date: "May 2025",
     description: "Hands-on workshop on AI-powered stock market predictions, algorithmic trading, and risk management, using tools like TensorFlow, Pandas, and yFinance.",
-    tags: ["TensorFlow", "Finance", "ML"]
+    tags: ["TensorFlow", "Finance", "ML"],
+    color: "#06b6d4", // cyan
+    location: "Lab 302",
+    whatsappGroup: "https://chat.whatsapp.com/IL3EaAdWweQDMg3TEy2lgR"
   },
   {
     id: 3,
     title: "AI Ethics & Future Trends Panel",
     date: "August 2025",
     description: "Expert panel on ethical AI, biases in AI models, deepfakes, data privacy, and AI's impact on jobs, featuring case studies and discussions.",
-    tags: ["Ethics", "Privacy", "Deepfakes"]
+    tags: ["Ethics", "Privacy", "Deepfakes"],
+    color: "#6366f1", // indigo
+    location: "Conference Hall",
+    whatsappGroup: "https://chat.whatsapp.com/IL3EaAdWweQDMg3TEy2lgR"
   },
   {
     id: 4,
     title: "InsightForge – AI Challenge",
     date: "September 2025",
     description: "AI challenge where participants build predictive ML/DL models with real-world datasets, focusing on model optimization and Kaggle-style problem-solving.",
-    tags: ["Competition", "Kaggle", "ML Models"]
+    tags: ["Competition", "Kaggle", "ML Models"],
+    color: "#ec4899", // pink
+    location: "Innovation Hub",
+    whatsappGroup: "https://chat.whatsapp.com/IL3EaAdWweQDMg3TEy2lgR"
   },
   {
     id: 5,
     title: "AI Literacy Campaigns",
     date: "October 2025",
     description: "AI awareness initiative featuring interactive workshops in schools and communities, live AI tool demonstrations, and AI for Social Good applications.",
-    tags: ["Education", "AI4Good", "Workshops"]
+    tags: ["Education", "AI4Good", "Workshops"],
+    color: "#14b8a6", // teal
+    location: "Community Center",
+    whatsappGroup: "https://chat.whatsapp.com/IL3EaAdWweQDMg3TEy2lgR"
   },
 ];
 
 // Tilt card effect component
-function TiltCard({ children }: { children: React.ReactNode }) {
+function TiltCard({ 
+  children, 
+  tabIndex,
+  onKeyDown
+}: { 
+  children: React.ReactNode;
+  tabIndex?: number;
+  onKeyDown?: (e: KeyboardEvent<HTMLDivElement>) => void;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
   const [hovering, setHovering] = useState(false);
+  const [focused, setFocused] = useState(false);
 
   // Spring animations for smooth movement
   const springConfig = { damping: 15, stiffness: 150 };
@@ -59,8 +86,8 @@ function TiltCard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     rotateXSpring.set(rotateX);
     rotateYSpring.set(rotateY);
-    scaleSpring.set(hovering ? 1.02 : 1);
-  }, [rotateX, rotateY, hovering, rotateXSpring, rotateYSpring, scaleSpring]);
+    scaleSpring.set(hovering || focused ? 1.02 : 1);
+  }, [rotateX, rotateY, hovering, focused, rotateXSpring, rotateYSpring, scaleSpring]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (ref.current) {
@@ -89,9 +116,26 @@ function TiltCard({ children }: { children: React.ReactNode }) {
     setHovering(false);
   };
 
+  const handleFocus = () => {
+    setFocused(true);
+    // Apply a gentle tilt effect when focused with keyboard
+    setRotateX(-2);
+    setRotateY(5);
+  };
+
+  const handleBlur = () => {
+    setFocused(false);
+    setRotateX(0);
+    setRotateY(0);
+  };
+
   return (
     <motion.div
       ref={ref}
+      tabIndex={tabIndex}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onKeyDown={onKeyDown}
       style={{
         transformStyle: "preserve-3d",
         transform: `
@@ -105,10 +149,11 @@ function TiltCard({ children }: { children: React.ReactNode }) {
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="h-full"
+      className="h-full outline-none focus:outline-none"
+      aria-live="polite"
     >
       {children}
-      {hovering && (
+      {(hovering || focused) && (
         <div
           className="absolute inset-0 rounded-lg pointer-events-none"
           style={{
@@ -120,7 +165,205 @@ function TiltCard({ children }: { children: React.ReactNode }) {
           }}
         />
       )}
+      {focused && (
+        <div className="absolute inset-0 rounded-lg pointer-events-none ring-2 ring-primary ring-offset-2 ring-offset-background"></div>
+      )}
     </motion.div>
+  );
+}
+
+// Interactive action button that slides in on hover/focus
+function ActionButton({ 
+  icon: Icon, 
+  label, 
+  onClick 
+}: { 
+  icon: React.ElementType; 
+  label: string; 
+  onClick: () => void; 
+}) {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <motion.button
+            onClick={onClick}
+            className="p-2 rounded-full bg-primary text-primary-foreground shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            whileHover={{ scale: 1.1 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            aria-label={label}
+          >
+            <Icon size={16} />
+          </motion.button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">
+          <p>{label}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
+// Event card component with accessibility features
+function EventCard({ 
+  event, 
+  index 
+}: { 
+  event: typeof upcomingEvents[0]; 
+  index: number; 
+}) {
+  const [showActions, setShowActions] = useState(false);
+  
+  // Add to calendar handler
+  const handleAddToCalendar = () => {
+    // Implement calendar integration
+    alert(`Added "${event.title}" to your calendar`);
+  };
+
+  // Share event handler
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: event.title,
+        text: `Join me at ${event.title} - ${event.description.substring(0, 100)}...`,
+        url: window.location.href + '#upcoming-events',
+      }).catch((error) => console.log('Error sharing', error));
+    } else {
+      // Fallback for browsers that don't support sharing
+      alert(`Share this event: ${event.title}`);
+    }
+  };
+
+  // Join WhatsApp group handler
+  const handleJoinWhatsApp = () => {
+    window.open(event.whatsappGroup, '_blank');
+  };
+
+  // Handle keyboard navigation
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      setShowActions(prev => !prev);
+      e.preventDefault();
+    }
+  };
+
+  return (
+    <div 
+      className="h-full group relative"
+      onMouseEnter={() => setShowActions(true)}
+      onMouseLeave={() => setShowActions(false)}
+      onFocus={() => setShowActions(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+          setShowActions(false);
+        }
+      }}
+    >
+      <TiltCard tabIndex={0} onKeyDown={handleKeyDown}>
+        <ContrastChecker 
+          foreground="#FFFFFF" 
+          background={event.color}
+          threshold={4.5}
+          warningMessage="Low contrast"
+        >
+          <Card className="h-full border border-primary/10 bg-gradient-to-b from-card/90 to-card/50 backdrop-blur relative overflow-hidden group">
+            {/* Color accent bar - based on event color */}
+            <div 
+              className="absolute top-0 left-0 right-0 h-1 transition-all duration-300 group-hover:h-2" 
+              style={{ backgroundColor: event.color }}
+              aria-hidden="true"
+            />
+            
+            {/* CPU decoration icon */}
+            <div className="absolute -top-6 -right-6 opacity-10 transform rotate-12 group-hover:rotate-45 transition-transform duration-700">
+              <Cpu size={60} />
+            </div>
+            
+            <CardContent className="p-6 relative z-10">
+              <div className="flex items-center gap-2 text-primary mb-3">
+                <Calendar className="h-4 w-4" />
+                <ResponsiveText baseSize={14} className="text-sm font-medium">{event.date}</ResponsiveText>
+              </div>
+              
+              <ResponsiveText as="h3" baseSize={20} className="text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300">
+                {event.title}
+              </ResponsiveText>
+              
+              <div className="flex items-start gap-1 text-muted-foreground mb-3">
+                <CalendarPlus className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                <ResponsiveText baseSize={14} className="text-sm">{event.location}</ResponsiveText>
+              </div>
+              
+              <ResponsiveText baseSize={14} className="text-sm text-muted-foreground leading-relaxed">
+                {event.description}
+              </ResponsiveText>
+              
+              <div className="flex flex-wrap gap-2 mt-4">
+                {event.tags.map((tag, i) => (
+                  <span 
+                    key={i} 
+                    className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary/10 text-primary"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </CardContent>
+            
+            <CardFooter className="px-6 pb-6 pt-0">
+              <FocusRing>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-xs w-full justify-between group-hover:text-primary transition-colors"
+                >
+                  <span>View Details</span>
+                  <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                </Button>
+              </FocusRing>
+            </CardFooter>
+            
+            {/* Action buttons that slide in on hover/focus */}
+            <motion.div 
+              className="absolute top-3 right-3 flex gap-2 z-20"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ 
+                opacity: showActions ? 1 : 0, 
+                y: showActions ? 0 : -10,
+                pointerEvents: showActions ? "auto" : "none"
+              }}
+              transition={{ duration: 0.2 }}
+            >
+              <ActionButton 
+                icon={CalendarPlus} 
+                label="Add to calendar" 
+                onClick={handleAddToCalendar} 
+              />
+              <ActionButton 
+                icon={Share2} 
+                label="Share event" 
+                onClick={handleShare} 
+              />
+              <ActionButton 
+                icon={Bell} 
+                label="Join WhatsApp group for updates" 
+                onClick={handleJoinWhatsApp} 
+              />
+            </motion.div>
+            
+            {/* Glowing effect on hover */}
+            <motion.div
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              style={{
+                background: "radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.1) 0%, transparent 60%)",
+              }}
+            />
+          </Card>
+        </ContrastChecker>
+      </TiltCard>
+    </div>
   );
 }
 
@@ -142,6 +385,9 @@ export default function UpcomingEvents() {
 
   return (
     <section id="upcoming-events" className="py-24 bg-gradient-to-b from-background to-background/80 relative overflow-hidden">
+      {/* Skip link for keyboard users */}
+      <SkipLink href="#events-list">Skip to events list</SkipLink>
+      
       {/* Electric particles */}
       {particles.map((particle) => (
         <motion.div
@@ -177,6 +423,7 @@ export default function UpcomingEvents() {
             className="relative inline-block"
           >
             <motion.h2 
+              id="events-heading"
               className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/80"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -191,6 +438,7 @@ export default function UpcomingEvents() {
                   scale: [1, 1.2, 0.9, 1.1, 1]
                 }}
                 transition={{ duration: 5, repeat: Infinity }}
+                aria-hidden="true"
               >
                 <Sparkles size={20} />
               </motion.span>
@@ -210,7 +458,7 @@ export default function UpcomingEvents() {
           </motion.p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div id="events-list" className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" aria-labelledby="events-heading">
           {upcomingEvents.map((event, index) => (
             <motion.div
               key={event.id}
@@ -220,53 +468,7 @@ export default function UpcomingEvents() {
               transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
               className="h-full"
             >
-              <TiltCard>
-                <Card className="h-full border border-primary/10 bg-gradient-to-b from-card/90 to-card/50 backdrop-blur relative overflow-hidden group">
-                  {/* CPU decoration icon */}
-                  <div className="absolute -top-6 -right-6 opacity-10 transform rotate-12 group-hover:rotate-45 transition-transform duration-700">
-                    <Cpu size={60} />
-                  </div>
-                  
-                  <CardContent className="p-6 relative z-10">
-                    <div className="flex items-center gap-2 text-primary mb-3">
-                      <Calendar className="h-4 w-4" />
-                      <span className="text-sm font-medium">{event.date}</span>
-                    </div>
-                    <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300">{event.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{event.description}</p>
-                    
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {event.tags.map((tag, i) => (
-                        <span 
-                          key={i} 
-                          className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary/10 text-primary"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  </CardContent>
-                  
-                  <CardFooter className="px-6 pb-6 pt-0">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="text-xs w-full justify-between group-hover:text-primary transition-colors"
-                    >
-                      <span>View Details</span>
-                      <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                    </Button>
-                  </CardFooter>
-                  
-                  {/* Glowing effect on hover */}
-                  <motion.div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                    style={{
-                      background: "radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.1) 0%, transparent 60%)",
-                    }}
-                  />
-                </Card>
-              </TiltCard>
+              <EventCard event={event} index={index} />
             </motion.div>
           ))}
         </div>
@@ -278,13 +480,15 @@ export default function UpcomingEvents() {
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
           >
-            <Button 
-              variant="outline" 
-              className="group border-primary/20 hover:border-primary/50"
-            >
-              <span>View All Events</span>
-              <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
+            <FocusRing>
+              <Button 
+                variant="outline" 
+                className="group border-primary/20 hover:border-primary/50"
+              >
+                <span>View All Events</span>
+                <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </FocusRing>
           </motion.div>
         </div>
       </div>
