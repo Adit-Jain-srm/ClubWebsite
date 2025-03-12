@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:hsl(326, 100%, 74%);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:hsl(210, 100%, 50%);stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Hexagonal Border -->
+  <path d="M60 10 L105 35 L105 85 L60 110 L15 85 L15 35 Z" 
+        fill="none" 
+        stroke="url(#logoGradient)" 
+        stroke-width="4"/>
+
+  <!-- AI Robot Face -->
+  <g transform="translate(30, 30)">
+    <!-- Robot Head -->
+    <rect x="10" y="10" width="40" height="40" 
+          rx="8" 
+          fill="none" 
+          stroke="url(#logoGradient)" 
+          stroke-width="3"/>
+
+    <!-- Eyes -->
+    <circle cx="25" cy="30" r="5" 
+            fill="url(#logoGradient)"/>
+    <circle cx="35" cy="30" r="5" 
+            fill="url(#logoGradient)"/>
+
+    <!-- Antenna -->
+    <path d="M30 10 L30 0 M25 0 L35 0" 
+          stroke="url(#logoGradient)" 
+          stroke-width="3" 
+          stroke-linecap="round"/>
+
+    <!-- Circuit Lines -->
+    <path d="M15 45 L45 45" 
+          stroke="url(#logoGradient)" 
+          stroke-width="2" 
+          stroke-linecap="round"
+          stroke-dasharray="4 2"/>
+  </g>
+</svg>

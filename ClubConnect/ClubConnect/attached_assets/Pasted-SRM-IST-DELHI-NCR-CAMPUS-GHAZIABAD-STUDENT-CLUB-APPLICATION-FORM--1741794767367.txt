@@ -1,0 +1,136 @@
+SRM IST DELHI-NCR CAMPUS GHAZIABAD
+
+STUDENT CLUB APPLICATION FORM 
+	
+
+
+
+
+
+								
+																									DATE:   07 / 03 / 2025  
+
+
+NAME OF THE CLUB
+	
+AI Nexus Club
+NAME OF THE CLUB MENTOR (HOD of the corresponding department) 
+	
+Dr. Avneesh Vashistha
+DATE OF ESTABLISHMENT OF THE CLUB
+
+	
+March 25, 2025
+
+
+VISION OF THE CLUB
+
+•	To establish a pioneering AI innovation hub, focusing on cutting-edge developments like AI agents, ethical AI, and API integrations beyond conventional learning.
+
+•	Bridge the gap between AI awareness within the campus and global AI trends by providing students with insights into AI industry events, advancements, and real-world applications.
+
+•	Develop a research-driven ecosystem where students work on AI-driven solutions that extend beyond software development, integrating AI into diverse fields.
+
+•	Promote responsible AI practices by focusing on fairness, transparency, and sustainability in AI models and their societal impact.
+
+•	Position the campus as a leader in AI product development, ethical AI advocacy, and next-generation AI deployment strategies.
+
+
+MISSION OF THE CLUB
+
+•	Provide specialized AI-focused training, covering emerging fields like autonomous AI agents, API-based AI integrations, and ethical AI considerations.
+
+•	Deliver a structured AI bootcamp series, equipping students with skills in problem-solving, AI deployment, and scalable AI solutions.
+
+•	Organize AI-centric resume-building workshops, mentorship sessions, and career guidance tailored for AI and ML aspirants.
+
+•	Launch a dedicated AI newsletter, offering insights into the latest AI events like Hackerrank AI Day 2025, GitHub AI advancements, and global AI challenges.
+
+•	Facilitate student participation in AI research initiatives, promoting publications and collaborations with AI-focused startups and industries.
+
+•	Encourage AI adoption across non-traditional domains, integrating AI with business, healthcare, and social sciences.
+
+
+OBJECTIVES OF THE CLUB
+
+•	Empower students with hands-on AI experience through live projects, API integrations, and real-world AI applications beyond competitions.
+
+•	Build a knowledge-sharing platform that provides resources on advanced AI frameworks, LeetCode problem-solving strategies, and AI-based resume enhancement.
+
+•	Advocate for ethical AI development, addressing biases, misinformation, and the responsible use of AI technology.
+
+•	Develop AI-driven solutions to assist students and faculty in academic and research activities, fostering practical AI applications within the campus.
+
+•	Establish an AI mentorship network, connecting students with AI researchers, professionals, and domain experts for career growth and project guidance.
+
+•	AI for Social Good implements AI-driven solutions in healthcare, environmental monitoring, and education to create a tangible societal impact.
+
+GOALS OF THE CLUB
+
+•	Launch an AI Awareness Initiative: Create an AI-focused newsletter and blog to keep students updated on AI advancements, global events, and industry trends.
+
+•	Develop Practical AI Solutions: Encourage students to build AI agents, automation tools, and API-based solutions for real-world use cases.
+
+•	Conduct High-Impact AI Bootcamps: Organize specialized AI bootcamps focusing on AI deployment, automation, and API integrations for industry readiness.
+
+•	Promote Ethical AI Practices: Establish workshops and discussion forums on ethical AI development, ensuring AI applications align with transparency and fairness principles.
+
+•	Enhance AI Career Readiness: Offer AI-specific resume-building workshops, industry connections, and hands-on project experience to give students a competitive edge in AI-driven careers.
+
+
+ACTION PLAN
+
+•	March 2025: Prompt~Craft
+Interactive seminar on Large Language Models (LLMs) and prompt engineering, covering GPT-based automation, AI agents, and API-driven AI interactions with expert insights.
+
+•	May 2025: Smart Stocks – AI & ML Strategies
+Hands-on workshop on AI-powered stock market predictions, algorithmic trading, and risk management, using tools like TensorFlow, Pandas, and yFinance with real-world fintech applications.
+
+•	August 2025: AI Ethics & Future Trends Panel
+Expert panel on ethical AI, biases in AI models, deepfakes, data privacy, and AI’s impact on jobs, featuring case studies and discussions on responsible AI adoption.
+
+•	September 2025: InsightForge – AI Challenge
+AI challenge where participants build predictive ML/DL models with real-world datasets, focusing on model optimization, Kaggle-style problem-solving, and industry mentorship.
+
+•	October 2025: AI Literacy Campaigns
+AI awareness initiative featuring interactive workshops in schools and communities, live AI tool demonstrations, and AI for Social Good applications in healthcare, environment, and education.
+
+
+FACULTY COORDINATOR
+
+Name of the Faculty	Employee ID	 Official email ID	Official Mobile Number	Department	Signature
+Shruthy Govindan	602157	shruthy@srmist.edu.in	9355062829	CSE -
+AIML	
+
+
+STUDENT COORDINATORS
+President
+
+Name of the Student	Registration Number	Official email ID	Mobile Number	Branch/
+Specialization/
+Sec/Year	Signature
+Adit Jain
+	RA2311026030176	aj9104@srmist.edu.in	8979013467	CSE AIML-C, 
+2nd Year	
+
+
+Vice President
+
+Name of the Student	Registration Number	Official email ID	Mobile Number	Branch/
+Specialization/
+Sec/Year	Signature
+Mehir Singh
+	RA2311026030175	ms8588@srmist.edu.in	7268930208	CSE AIML-C, 
+2nd Year	
+
+
+Secretary
+
+Name of the Student	Registration Number	Official email ID	Mobile Number	Branch/
+Specialization/
+Sec/Year	Signature
+Vasvi
+Singla
+	RA2311026030128            	vs9458@srmist.edu.in	9896000934	CSE AIML-C, 
+2nd Year	
+
