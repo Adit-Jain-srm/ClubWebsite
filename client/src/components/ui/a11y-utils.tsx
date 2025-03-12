@@ -237,6 +237,8 @@ interface ContrastCheckerProps {
   fontSize?: 'small' | 'large';
   children?: React.ReactNode;
   className?: string;
+  threshold?: number;
+  warningMessage?: string;
 }
 
 export function ContrastChecker({
@@ -245,48 +247,28 @@ export function ContrastChecker({
   fontSize = 'small',
   children,
   className,
+  threshold = 4.5,
+  warningMessage = "Low contrast"
 }: ContrastCheckerProps) {
-  const { contrast, compliance } = useContrastCheck(foreground, background);
-  const isLargeText = fontSize === 'large';
+  const { contrast } = useContrastCheck(foreground, background);
+  const hasWarning = threshold && contrast < threshold;
   
   return (
     <div 
       className={cn(
-        "p-4 rounded-md border", 
+        "p-0 rounded-md", 
         className
       )}
       style={{ color: foreground, backgroundColor: background }}
     >
-      <div className="flex flex-col gap-2">
-        {children && <div className="mb-4">{children}</div>}
-        
-        <div className="flex justify-between items-center text-sm">
-          <span>Contrast Ratio:</span>
-          <span className="font-mono font-bold">{contrast.toFixed(2)}:1</span>
+      {children}
+      
+      {/* Only show warning if contrast is below threshold */}
+      {hasWarning && (
+        <div className="absolute top-2 right-2 bg-yellow-600 text-white text-xs p-1 px-2 rounded opacity-80">
+          {warningMessage}
         </div>
-        
-        <div className="flex justify-between items-center text-sm">
-          <span>WCAG AA:</span>
-          <span>
-            {isLargeText ? (
-              compliance.AA.large ? "✓ Pass" : "✗ Fail"
-            ) : (
-              compliance.AA.normal ? "✓ Pass" : "✗ Fail"
-            )}
-          </span>
-        </div>
-        
-        <div className="flex justify-between items-center text-sm">
-          <span>WCAG AAA:</span>
-          <span>
-            {isLargeText ? (
-              compliance.AAA.large ? "✓ Pass" : "✗ Fail"
-            ) : (
-              compliance.AAA.normal ? "✓ Pass" : "✗ Fail"
-            )}
-          </span>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

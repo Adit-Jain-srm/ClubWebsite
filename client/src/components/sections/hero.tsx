@@ -332,26 +332,6 @@ export default function Hero() {
         </motion.div>
       </div>
       
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 0.7, y: 0 }}
-        transition={{ delay: 1.5, duration: 1 }}
-      >
-        <motion.div
-          className="w-6 h-10 rounded-full border-2 border-cyan-500/30 flex justify-center"
-          animate={{ borderColor: ["rgba(8, 145, 178, 0.3)", "rgba(8, 145, 178, 0.6)", "rgba(8, 145, 178, 0.3)"] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <motion.div
-            className="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-2"
-            animate={{ y: [0, 15, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </motion.div>
-      </motion.div>
-      
       {/* Bottom gradient */}
       <motion.div 
         className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#01020e] to-transparent"
