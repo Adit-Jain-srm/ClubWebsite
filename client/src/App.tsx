@@ -12,9 +12,13 @@ import Resources from "@/pages/resources";
 import Join from "@/pages/join";
 import News from "@/pages/news";
 import NotFound from "@/pages/not-found";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
+import { SkipLink } from "@/components/ui/a11y-utils";
+import { KeyboardNavigation } from "@/components/ui/KeyboardNavigation";
+import { WhatsAppInvite } from "@/components/WhatsAppInvite";
 
+// Enhanced scroll-to-hash element with focus management and accessibility
 function ScrollToHashElement() {
   const [location] = useLocation();
   
@@ -25,7 +29,28 @@ function ScrollToHashElement() {
       setTimeout(() => {
         const element = document.getElementById(elementId);
         if (element) {
+          // Smooth scroll to the element
           element.scrollIntoView({ behavior: 'smooth' });
+          
+          // Set focus for keyboard users after scrolling
+          setTimeout(() => {
+            if (element.tabIndex < 0) {
+              element.tabIndex = -1; // Make it focusable but not in tab order
+            }
+            element.focus({ preventScroll: true });
+            
+            // Announce for screen readers
+            const announcement = document.createElement('div');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.className = 'sr-only';
+            announcement.textContent = `Navigated to ${element.tagName === 'SECTION' ? 'section' : 'element'}: ${element.getAttribute('aria-label') || elementId}`;
+            document.body.appendChild(announcement);
+            
+            // Clean up announcement
+            setTimeout(() => {
+              document.body.removeChild(announcement);
+            }, 1000);
+          }, 600);
         }
       }, 100);
     } else if (location === '/') {
@@ -37,11 +62,77 @@ function ScrollToHashElement() {
   return null;
 }
 
+// Dynamic page title updater for better accessibility
+function PageTitle() {
+  const [location] = useLocation();
+  
+  useEffect(() => {
+    let title = "ClubConnect - AI Nexus Club";
+    
+    // Update title based on current route
+    if (location === "/") {
+      title = "Home | ClubConnect - AI Nexus Club";
+    } else if (location.startsWith("/events/")) {
+      title = "Event Details | ClubConnect - AI Nexus Club";
+    } else if (location === "/team") {
+      title = "Our Team | ClubConnect - AI Nexus Club";
+    } else if (location === "/resources") {
+      title = "Resources | ClubConnect - AI Nexus Club";
+    } else if (location === "/join") {
+      title = "Join Us | ClubConnect - AI Nexus Club";
+    } else if (location === "/news") {
+      title = "News | ClubConnect - AI Nexus Club";
+    } else {
+      title = "Page Not Found | ClubConnect - AI Nexus Club";
+    }
+    
+    document.title = title;
+  }, [location]);
+  
+  return null;
+}
+
+// Enhanced Router with accessibility features
 function Router() {
+  // Track if user prefers reduced motion
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  
+  // Apply user font size preferences
+  useEffect(() => {
+    // Check for reduced motion preference
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(motionQuery.matches);
+    
+    const handleMotionChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches);
+    };
+    
+    motionQuery.addEventListener('change', handleMotionChange);
+    
+    // Apply font scaling based on user preferences
+    const html = document.documentElement;
+    const userFontSize = window.getComputedStyle(html).fontSize;
+    const baseFontSize = parseInt(userFontSize);
+    
+    if (baseFontSize !== 16) {
+      // User has adjusted their browser font size, respect it
+      const scaleFactor = baseFontSize / 16;
+      document.body.style.setProperty('--font-scale-factor', scaleFactor.toString());
+    }
+    
+    return () => {
+      motionQuery.removeEventListener('change', handleMotionChange);
+    };
+  }, []);
+  
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className={`min-h-screen flex flex-col ${prefersReducedMotion ? 'reduce-motion' : ''}`}>
+      {/* Skip link for keyboard users */}
+      <SkipLink href="#main-content">Skip to main content</SkipLink>
+      
       <Navbar />
-      <main className="flex-grow">
+      <main id="main-content" className="flex-grow outline-none" tabIndex={-1}>
+        <PageTitle />
         <ScrollToHashElement />
         <Switch>
           <Route path="/" component={Home} />
@@ -62,7 +153,10 @@ function App() {
   return (
     <ThemeProvider defaultTheme="dark" forcedTheme="dark">
       <QueryClientProvider client={queryClient}>
-        <Router />
+        <KeyboardNavigation>
+          <Router />
+          <WhatsAppInvite groupLink="https://chat.whatsapp.com/IL3EaAdWweQDMg3TEy2lgR" />
+        </KeyboardNavigation>
         <Toaster />
       </QueryClientProvider>
     </ThemeProvider>

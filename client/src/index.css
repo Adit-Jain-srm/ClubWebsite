@@ -31,6 +31,11 @@
     --border: 232 47% 12%;
     --input: 232 47% 12%;
     --ring: 326 100% 74%;
+
+    /* Accessibility-specific variables */
+    --font-scale-factor: 1;
+    --focus-visible-ring: 0 0 0 2px var(--background), 0 0 0 4px hsl(var(--ring));
+    --keyboard-focus-ring: 0 0 0 3px var(--background), 0 0 0 5px hsl(var(--ring));
   }
 
   * {
@@ -43,5 +48,63 @@
       radial-gradient(circle at 100% 100%, rgba(255, 0, 128, 0.1) 0%, transparent 50%),
       radial-gradient(circle at 0% 0%, rgba(0, 128, 255, 0.1) 0%, transparent 50%);
     background-attachment: fixed;
+    /* Respect user font size preferences */
+    font-size: calc(100% * var(--font-scale-factor));
+  }
+
+  /* Enhanced keyboard navigation focus styles */
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus-visible-ring);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Skip links for keyboard navigation */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Responsive typography */
+  .text-responsive {
+    font-size: calc(1rem * var(--font-scale-factor));
+  }
+
+  /* Reduced motion preferences */
+  .reduce-motion * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* High contrast mode adjustments */
+  @media (forced-colors: active) {
+    .high-contrast-adjust {
+      border: 1px solid transparent;
+    }
+    
+    /* Ensure buttons are visible in high contrast mode */
+    button:not([disabled]),
+    a[role="button"]:not([disabled]) {
+      border: 1px solid currentColor;
+    }
   }
 }
