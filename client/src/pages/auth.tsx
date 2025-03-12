@@ -6,30 +6,36 @@ import { Label } from "@/components/ui/label";
 import { Lock } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { insertUserSchema } from "@shared/schema";
+import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 
+const loginSchema = z.object({
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
+
 export default function Auth() {
-  const { login, register } = useAuth();
+  const { login } = useAuth();
   const [, setLocation] = useLocation();
-  const form = useForm({
-    resolver: zodResolver(insertUserSchema),
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       username: "",
-      email: "",
       password: "",
-      name: "",
     },
   });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: LoginFormValues) => {
     try {
-      await register(data);
+      await login(data);
       setLocation("/");
     } catch (error) {
-      console.error("Registration failed:", error);
+      console.error("Login failed:", error);
+      form.setError("root", { message: "Invalid username or password" });
     }
   };
 
@@ -47,9 +53,9 @@ export default function Auth() {
                 <Lock className="h-6 w-6 text-primary" />
               </div>
             </div>
-            <CardTitle className="text-2xl">Create an Account</CardTitle>
+            <CardTitle className="text-2xl">Login</CardTitle>
             <CardDescription>
-              Enter your email below to create your account and register for events.
+              Enter your credentials to access the admin dashboard.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -57,40 +63,12 @@ export default function Auth() {
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                   control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="John Doe" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
                   name="username"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Username</FormLabel>
                       <FormControl>
-                        <Input placeholder="johndoe" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input type="email" placeholder="you@srmist.edu.in" {...field} />
+                        <Input placeholder="admin" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -111,8 +89,14 @@ export default function Auth() {
                   )}
                 />
 
+                {form.formState.errors.root && (
+                  <p className="text-sm font-medium text-destructive">
+                    {form.formState.errors.root.message}
+                  </p>
+                )}
+
                 <Button type="submit" className="w-full">
-                  Register
+                  Login
                 </Button>
               </form>
             </Form>
