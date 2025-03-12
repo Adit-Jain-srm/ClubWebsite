@@ -35,7 +35,7 @@ export default function Footer() {
           <p className="text-sm text-muted-foreground">
             SRM IST Delhi-NCR Campus<br />
             Ghaziabad<br />
-            Email: ai.nexus@srmist.edu.in
+            Email: ainexus.srmist@gmail.com
           </p>
         </div>
       </div>
