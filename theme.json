@@ -1,6 +1,15 @@
 {
   "variant": "tint",
-  "primary": "hsl(326, 100%, 74%)",
+  "primary": "hsl(195, 93%, 60%)",
+  "accent": "hsl(210, 100%, 66%)",
   "appearance": "dark",
+  "background": "hsl(228, 50%, 5%)",
+  "foreground": "hsl(210, 40%, 98%)",
+  "card": "hsl(228, 45%, 8%)",
+  "popover": "hsl(228, 45%, 8%)",
+  "border": "hsl(228, 30%, 15%)",
+  "input": "hsl(228, 30%, 15%)",
+  "muted": "hsl(228, 20%, 12%)",
+  "mutedForeground": "hsl(210, 40%, 80%)",
   "radius": 0.75
 }
